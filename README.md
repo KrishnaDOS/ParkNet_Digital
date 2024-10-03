@@ -1,4 +1,4 @@
-# Project ParkMe
+# Project ParkGSU
 
 #### Software Engineers: Alex Nguyen, Avyuktkrishna Ramasamy, Jaylen Hill, Kawsar Ali, Luv Dabhi
 #### Course: CSC 4350 Software Engineering CTW Section 004 (Face-to-Face TR 2:45 PM)
