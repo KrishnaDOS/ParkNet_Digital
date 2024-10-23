@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'events.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -11,9 +12,7 @@ class Dashboard extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
-            onPressed: () {
-              // TODO: Navigate to Profile
-            },
+            onPressed: () {},
           ),
         ],
       ),
@@ -31,6 +30,16 @@ class Dashboard extends StatelessWidget {
                   context, 'Customer Support', Icons.support),
             ),
             SizedBox(height: 16),
+            Expanded(
+              child: _buildDashboardItem(
+                  context, 'Local Event Finder', Icons.event, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EventsPage()),
+                );
+              }),
+            ),
+            SizedBox(height: 16),
             _buildLogoutButton(context),
           ],
         ),
@@ -38,24 +47,28 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildDashboardItem(
-      BuildContext context, String title, IconData icon) {
-    return Card(
-      elevation: 4.0,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.white,
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 40),
-              SizedBox(height: 8),
-              Text(title,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            ],
+  Widget _buildDashboardItem(BuildContext context, String title, IconData icon,
+      [VoidCallback? onTap]) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        elevation: 4.0,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, size: 40),
+                SizedBox(height: 8),
+                Text(title,
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              ],
+            ),
           ),
         ),
       ),
@@ -66,7 +79,7 @@ class Dashboard extends StatelessWidget {
     return Card(
       elevation: 4.0,
       child: Container(
-        height: 60, // Adjust the height as needed
+        height: 60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: Colors.redAccent,

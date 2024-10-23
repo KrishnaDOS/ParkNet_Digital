@@ -1,3 +1,4 @@
+// registration.dart
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,11 +33,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
             .collection('users')
             .doc(userCredential.user?.uid)
             .set({
-          'first_name': firstName,
-          'last_name': lastName,
+          // 'first_name': firstName,
+          // 'last_name': lastName,
           'email': email,
           'username': username,
-          'date_of_birth': dateOfBirth?.toIso8601String(),
+          // 'date_of_birth': dateOfBirth?.toIso8601String(),
           'created_at': FieldValue.serverTimestamp(),
         });
 

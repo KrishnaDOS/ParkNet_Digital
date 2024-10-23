@@ -19,7 +19,8 @@ class _LoginPageState extends State<LoginPage> {
           email: email,
           password: password,
         );
-        Navigator.pushNamed(context, '/dashboard');
+        // Replace the current route with the dashboard, preventing back navigation
+        Navigator.pushReplacementNamed(context, '/dashboard');
       } on FirebaseAuthException catch (e) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(e.message ?? 'Error')));
