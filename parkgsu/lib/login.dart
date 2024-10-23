@@ -19,7 +19,6 @@ class _LoginPageState extends State<LoginPage> {
           email: email,
           password: password,
         );
-        // Replace the current route with the dashboard, preventing back navigation
         Navigator.pushReplacementNamed(context, '/dashboard');
       } on FirebaseAuthException catch (e) {
         ScaffoldMessenger.of(context)
@@ -31,14 +30,14 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey[900], // Dark background
+      backgroundColor: Colors.blueGrey[900],
       appBar: AppBar(
         title: const Text(
           'Login',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.blueAccent[700], // Dark blue app bar
+        backgroundColor: Colors.blueAccent[700],
         elevation: 4,
       ),
       body: Padding(
@@ -46,47 +45,47 @@ class _LoginPageState extends State<LoginPage> {
         child: Form(
           key: _formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center, // Center the form
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Email or Username',
-                  labelStyle: TextStyle(color: Colors.white), // White label text
+                  labelStyle: TextStyle(color: Colors.white),
                   enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline
+                    borderSide: BorderSide(color: Colors.lightBlueAccent),
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline when focused
+                    borderSide: BorderSide(color: Colors.lightBlueAccent),
                   ),
                 ),
                 onChanged: (value) => email = value,
                 validator: (value) =>
                     value!.isEmpty ? 'Enter your email or username' : null,
-                style: TextStyle(color: Colors.white), // White text
+                style: TextStyle(color: Colors.white),
               ),
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Password',
-                  labelStyle: TextStyle(color: Colors.white), // White label text
+                  labelStyle: TextStyle(color: Colors.white),
                   enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline
+                    borderSide: BorderSide(color: Colors.lightBlueAccent),
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline when focused
+                    borderSide: BorderSide(color: Colors.lightBlueAccent),
                   ),
                 ),
                 obscureText: true,
                 onChanged: (value) => password = value,
                 validator: (value) =>
                     value!.isEmpty ? 'Enter your password' : null,
-                style: TextStyle(color: Colors.white), // White text
+                style: TextStyle(color: Colors.white),
               ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: loginUser,
                 child: const Text('Login'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlueAccent, // Use 'backgroundColor' instead of 'primary'
+                  backgroundColor: Colors.lightBlueAccent,
                 ),
               ),
               TextButton(
@@ -95,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 child: const Text(
                   'Create an Account',
-                  style: TextStyle(color: Colors.white), // White text
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ],

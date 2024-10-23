@@ -27,7 +27,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
           password: password,
         );
 
-        // Save additional user info to Firestore
         await FirebaseFirestore.instance
             .collection('users')
             .doc(userCredential.user?.uid)
@@ -50,14 +49,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey[900], // Dark background
+      backgroundColor: Colors.blueGrey[900],
       appBar: AppBar(
         title: const Text(
           'Register',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.blueAccent[700], // Dark blue app bar
+        backgroundColor: Colors.blueAccent[700],
         elevation: 4,
       ),
       body: Padding(
@@ -65,81 +64,81 @@ class _RegistrationPageState extends State<RegistrationPage> {
         child: Form(
           key: _formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center, // Center the form
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'First Name',
-                  labelStyle: TextStyle(color: Colors.white), // White label text
+                  labelStyle: TextStyle(color: Colors.white),
                   enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline
+                    borderSide: BorderSide(color: Colors.lightBlueAccent),
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline when focused
+                    borderSide: BorderSide(color: Colors.lightBlueAccent),
                   ),
                 ),
                 onChanged: (value) => firstName = value,
                 validator: (value) =>
                     value!.isEmpty ? 'Enter your first name' : null,
-                style: TextStyle(color: Colors.white), // White text
+                style: TextStyle(color: Colors.white),
               ),
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Last Name',
-                  labelStyle: TextStyle(color: Colors.white), // White label text
+                  labelStyle: TextStyle(color: Colors.white),
                   enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline
+                    borderSide: BorderSide(color: Colors.lightBlueAccent),
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline when focused
+                    borderSide: BorderSide(color: Colors.lightBlueAccent),
                   ),
                 ),
                 onChanged: (value) => lastName = value,
                 validator: (value) =>
                     value!.isEmpty ? 'Enter your last name' : null,
-                style: TextStyle(color: Colors.white), // White text
+                style: TextStyle(color: Colors.white),
               ),
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Email',
-                  labelStyle: TextStyle(color: Colors.white), // White label text
+                  labelStyle: TextStyle(color: Colors.white),
                   enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline
+                    borderSide: BorderSide(color: Colors.lightBlueAccent),
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline when focused
+                    borderSide: BorderSide(color: Colors.lightBlueAccent),
                   ),
                 ),
                 onChanged: (value) => email = value,
                 validator: (value) =>
                     value!.isEmpty ? 'Enter your email' : null,
-                style: TextStyle(color: Colors.white), // White text
+                style: TextStyle(color: Colors.white),
               ),
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Username',
-                  labelStyle: TextStyle(color: Colors.white), // White label text
+                  labelStyle: TextStyle(color: Colors.white),
                   enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline
+                    borderSide: BorderSide(color: Colors.lightBlueAccent),
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline when focused
+                    borderSide: BorderSide(color: Colors.lightBlueAccent),
                   ),
                 ),
                 onChanged: (value) => username = value,
                 validator: (value) =>
                     value!.isEmpty ? 'Enter a username' : null,
-                style: TextStyle(color: Colors.white), // White text
+                style: TextStyle(color: Colors.white),
               ),
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Password',
-                  labelStyle: TextStyle(color: Colors.white), // White label text
+                  labelStyle: TextStyle(color: Colors.white),
                   enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline
+                    borderSide: BorderSide(color: Colors.lightBlueAccent),
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline when focused
+                    borderSide: BorderSide(color: Colors.lightBlueAccent),
                   ),
                 ),
                 obscureText: true,
@@ -147,7 +146,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 validator: (value) => value!.length < 6
                     ? 'Password must be at least 6 characters'
                     : null,
-                style: TextStyle(color: Colors.white), // White text
+                style: TextStyle(color: Colors.white),
               ),
               SizedBox(height: 10),
               TextButton(
@@ -167,14 +166,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   dateOfBirth == null
                       ? 'Select Date of Birth'
                       : dateOfBirth!.toLocal().toString().split(' ')[0],
-                  style: TextStyle(color: Colors.lightBlueAccent), // Light blue text
+                  style: TextStyle(color: Colors.lightBlueAccent),
                 ),
               ),
               ElevatedButton(
                 onPressed: registerUser,
                 child: const Text('Register'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlueAccent, // Light blue button
+                  backgroundColor: Colors.lightBlueAccent,
                 ),
               ),
             ],

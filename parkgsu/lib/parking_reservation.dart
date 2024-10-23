@@ -6,14 +6,14 @@ class ParkingReservation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey[900], // Dark background
+      backgroundColor: Colors.blueGrey[900],
       appBar: AppBar(
         title: const Text(
           'Parking Reservation',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.blueAccent[700], // Dark blue app bar
+        backgroundColor: Colors.blueAccent[700],
         elevation: 4,
       ),
       body: Padding(
@@ -45,13 +45,13 @@ class ParkingReservation extends StatelessWidget {
   Widget _buildReservationOption(BuildContext context, String title, IconData icon, Color color, String route) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, route); // Navigate to respective route
+        Navigator.pushNamed(context, route);
       },
       child: Card(
-        color: Colors.blueGrey[800], // Darker card background
+        color: Colors.blueGrey[800],
         elevation: 6,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16), // Rounded corners
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Container(
           padding: EdgeInsets.all(20),
@@ -71,9 +71,9 @@ class ParkingReservation extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  color: Colors.white, // White text
+                  color: Colors.white,
                   fontSize: 18,
-                  fontWeight: FontWeight.w500, // Match the font weight and size
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
@@ -104,10 +104,10 @@ class NearestParkingDeckScreen extends StatelessWidget {
             'Nearest parking deck details will be shown here.',
             style: TextStyle(
               fontSize: 18, 
-              color: Colors.white, // White text
-              fontWeight: FontWeight.w500, // Match the weight and size
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
             ),
-            textAlign: TextAlign.center, // Center-align text
+            textAlign: TextAlign.center,
           ),
         ),
       ),
@@ -136,9 +136,9 @@ class SpecificParkingDeckScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 18, 
               color: Colors.white, 
-              fontWeight: FontWeight.w500, // Match the font weight and size
+              fontWeight: FontWeight.w500,
             ),
-            textAlign: TextAlign.center, // Center-align text
+            textAlign: TextAlign.center,
           ),
         ),
       ),

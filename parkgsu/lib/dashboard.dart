@@ -7,14 +7,14 @@ class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey[900], // Dark background
+      backgroundColor: Colors.blueGrey[900],
       appBar: AppBar(
         title: const Text(
           'ParkGSU Dashboard',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.blueAccent[700], // Dark blue app bar
+        backgroundColor: Colors.blueAccent[700],
         elevation: 4,
       ),
       body: Padding(
@@ -38,7 +38,6 @@ class Dashboard extends StatelessWidget {
               Icons.support_agent, 
               Colors.redAccent, 
               () {
-                // Add customer support route or function
               }
             ),
             SizedBox(height: 20),
@@ -55,23 +54,22 @@ class Dashboard extends StatelessWidget {
               }
             ),
             SizedBox(height: 30),
-            _buildLogoutButton(context), // Logout button at the bottom
+            _buildLogoutButton(context),
           ],
         ),
       ),
     );
   }
 
-  // Updated dashboard item card
   Widget _buildDashboardItem(
       BuildContext context, String title, IconData icon, Color color, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        color: Colors.blueGrey[800], // Darker card background
+        color: Colors.blueGrey[800],
         elevation: 6,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16), // Rounded corners
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Container(
           padding: EdgeInsets.all(20),
@@ -91,7 +89,7 @@ class Dashboard extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  color: Colors.white, // White text
+                  color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -103,14 +101,12 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  // Updated logout button
   Widget _buildLogoutButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Add logout functionality
       },
       child: Card(
-        color: Colors.redAccent, // Red background for logout button
+        color: Colors.redAccent,
         elevation: 6,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),

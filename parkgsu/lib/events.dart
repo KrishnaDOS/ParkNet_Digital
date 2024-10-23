@@ -6,14 +6,14 @@ class EventsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey[900], // Dark background
+      backgroundColor: Colors.blueGrey[900],
       appBar: AppBar(
         title: const Text(
           'Local Events',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.blueAccent[700], // Dark blue app bar
+        backgroundColor: Colors.blueAccent[700],
         elevation: 4,
       ),
       body: Center(
@@ -23,10 +23,10 @@ class EventsPage extends StatelessWidget {
             'Here you can find nearby parking for local events!',
             style: TextStyle(
               fontSize: 18, 
-              color: Colors.white, // White text
+              color: Colors.white,
               fontWeight: FontWeight.w500,
             ),
-            textAlign: TextAlign.center, // Center-align text
+            textAlign: TextAlign.center,
           ),
         ),
       ),
