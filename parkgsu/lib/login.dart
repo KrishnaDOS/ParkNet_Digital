@@ -31,36 +31,72 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
+      backgroundColor: Colors.blueGrey[900], // Dark background
+      appBar: AppBar(
+        title: const Text(
+          'Login',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent[700], // Dark blue app bar
+        elevation: 4,
+      ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center, // Center the form
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Email or Username'),
+                decoration: InputDecoration(
+                  labelText: 'Email or Username',
+                  labelStyle: TextStyle(color: Colors.white), // White label text
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline when focused
+                  ),
+                ),
                 onChanged: (value) => email = value,
                 validator: (value) =>
                     value!.isEmpty ? 'Enter your email or username' : null,
+                style: TextStyle(color: Colors.white), // White text
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Password'),
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  labelStyle: TextStyle(color: Colors.white), // White label text
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.lightBlueAccent), // Light blue underline when focused
+                  ),
+                ),
                 obscureText: true,
                 onChanged: (value) => password = value,
                 validator: (value) =>
                     value!.isEmpty ? 'Enter your password' : null,
+                style: TextStyle(color: Colors.white), // White text
               ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: loginUser,
-                child: Text('Login'),
+                child: const Text('Login'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.lightBlueAccent, // Use 'backgroundColor' instead of 'primary'
+                ),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/register');
                 },
-                child: Text('Create an Account'),
+                child: const Text(
+                  'Create an Account',
+                  style: TextStyle(color: Colors.white), // White text
+                ),
               ),
             ],
           ),

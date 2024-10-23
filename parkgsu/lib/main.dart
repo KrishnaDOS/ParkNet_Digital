@@ -1,10 +1,10 @@
-// main.dart
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'registration.dart';
 import 'login.dart';
 import 'dashboard.dart';
+import 'parking_reservation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +27,9 @@ class MyApp extends StatelessWidget {
         '/': (context) => LoginPage(),
         '/register': (context) => RegistrationPage(),
         '/dashboard': (context) => Dashboard(),
+        '/parkingReservation': (context) => ParkingReservation(), 
+        '/nearestParkingDeck': (context) => NearestParkingDeckScreen(), 
+        '/specificParkingDeck': (context) => SpecificParkingDeckScreen(), 
       },
     );
   }

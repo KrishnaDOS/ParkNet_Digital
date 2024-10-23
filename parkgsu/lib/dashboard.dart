@@ -7,88 +7,124 @@ class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blueGrey[900], // Dark background
       appBar: AppBar(
-        title: const Text('ParkGSU Dashboard'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {},
-          ),
-        ],
+        title: const Text(
+          'ParkGSU Dashboard',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent[700], // Dark blue app bar
+        elevation: 4,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: _buildDashboardItem(
-                  context, 'Parking Reservation', Icons.local_parking),
+            _buildDashboardItem(
+              context, 
+              'Parking Reservation', 
+              Icons.local_parking, 
+              Colors.lightBlueAccent, 
+              () {
+                Navigator.pushNamed(context, '/parkingReservation');
+              }
             ),
-            SizedBox(height: 16),
-            Expanded(
-              child: _buildDashboardItem(
-                  context, 'Customer Support', Icons.support),
+            SizedBox(height: 20),
+            _buildDashboardItem(
+              context, 
+              'Customer Support', 
+              Icons.support_agent, 
+              Colors.redAccent, 
+              () {
+                // Add customer support route or function
+              }
             ),
-            SizedBox(height: 16),
-            Expanded(
-              child: _buildDashboardItem(
-                  context, 'Local Event Finder', Icons.event, () {
+            SizedBox(height: 20),
+            _buildDashboardItem(
+              context, 
+              'Local Event Finder', 
+              Icons.event, 
+              Colors.greenAccent, 
+              () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => EventsPage()),
                 );
-              }),
+              }
             ),
-            SizedBox(height: 16),
-            _buildLogoutButton(context),
+            SizedBox(height: 30),
+            _buildLogoutButton(context), // Logout button at the bottom
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDashboardItem(BuildContext context, String title, IconData icon,
-      [VoidCallback? onTap]) {
+  // Updated dashboard item card
+  Widget _buildDashboardItem(
+      BuildContext context, String title, IconData icon, Color color, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        elevation: 4.0,
+        color: Colors.blueGrey[800], // Darker card background
+        elevation: 6,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16), // Rounded corners
+        ),
         child: Container(
+          padding: EdgeInsets.all(20),
+          height: 120,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
           ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, size: 40),
-                SizedBox(height: 8),
-                Text(title,
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(
+                icon,
+                size: 50,
+                color: color,
+              ),
+              SizedBox(width: 20),
+              Text(
+                title,
+                style: TextStyle(
+                  color: Colors.white, // White text
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
+  // Updated logout button
   Widget _buildLogoutButton(BuildContext context) {
-    return Card(
-      elevation: 4.0,
-      child: Container(
-        height: 60,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.redAccent,
+    return GestureDetector(
+      onTap: () {
+        // Add logout functionality
+      },
+      child: Card(
+        color: Colors.redAccent, // Red background for logout button
+        elevation: 6,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
         ),
-        child: Center(
+        child: Container(
+          height: 60,
+          alignment: Alignment.center,
           child: Text(
             'Logout',
             style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+              color: Colors.white, 
+              fontSize: 20, 
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
