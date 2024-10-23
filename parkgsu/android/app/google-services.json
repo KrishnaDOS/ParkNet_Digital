@@ -1,0 +1,29 @@
+{
+    "project_info": {
+      "project_number": "571991627129",
+      "project_id": "parkgsu-11fc1",
+      "storage_bucket": "parkgsu-11fc1.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:571991627129:android:42071f0e506b12dd4a0ba8",
+          "android_client_info": {
+            "package_name": "com.example.parkgsu"
+          }
+        },
+        "oauth_client": [],
+        "api_key": [
+          {
+            "current_key": "AIzaSyA961tYZGkhEivkU2uuufJnd4DhnpVNgY8"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": []
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }
