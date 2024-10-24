@@ -22,19 +22,29 @@ class ParkingReservation extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildReservationOption(
-              context, 
-              'Search Nearest Parking Deck', 
-              Icons.location_on, 
-              Colors.lightBlueAccent, 
-              '/nearestParkingDeck'
+              context,
+              'Search Nearest Parking Deck',
+              Icons.location_on,
+              Colors.lightBlueAccent,
+              '/nearestParkingDeck',
             ),
             SizedBox(height: 20),
             _buildReservationOption(
-              context, 
-              'Search Specific Parking Deck', 
-              Icons.local_parking, 
-              Colors.greenAccent, 
-              '/specificParkingDeck'
+              context,
+              'Search Specific Parking Deck',
+              Icons.domain,
+              Colors.greenAccent,
+              '/specificParkingDeck',
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Choose an option to reserve parking.',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -42,7 +52,8 @@ class ParkingReservation extends StatelessWidget {
     );
   }
 
-  Widget _buildReservationOption(BuildContext context, String title, IconData icon, Color color, String route) {
+  Widget _buildReservationOption(
+      BuildContext context, String title, IconData icon, Color color, String route) {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, route);
@@ -68,12 +79,14 @@ class ParkingReservation extends StatelessWidget {
                 color: color,
               ),
               SizedBox(width: 20),
-              Text(
-                title,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
@@ -84,64 +97,5 @@ class ParkingReservation extends StatelessWidget {
   }
 }
 
-class NearestParkingDeckScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blueGrey[900],
-      appBar: AppBar(
-        title: const Text(
-          'Nearest Parking Deck',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.blueAccent[700],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Text(
-            'Nearest parking deck details will be shown here.',
-            style: TextStyle(
-              fontSize: 18, 
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
-    );
-  }
-}
 
-class SpecificParkingDeckScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blueGrey[900],
-      appBar: AppBar(
-        title: const Text(
-          'Specific Parking Deck',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.blueAccent[700],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Text(
-            'Specific parking deck search will be implemented here.',
-            style: TextStyle(
-              fontSize: 18, 
-              color: Colors.white, 
-              fontWeight: FontWeight.w500,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
-    );
-  }
-}
+
