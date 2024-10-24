@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         '/dashboard': (context) => Dashboard(),
         '/parkingReservation': (context) => ParkingReservation(),
         '/nearestParkingDeck': (context) => NearestParkingDeckScreen(),
-        '/specificParkingDeck': (context) => SpecificParkingDeckScreen(), 
+        '/specificParkingDeck': (context) => SpecificParkingDeckScreen(),
       },
     );
   }

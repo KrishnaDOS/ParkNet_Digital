@@ -3,7 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SpecificParkingDeckScreen extends StatefulWidget {
   @override
-  _SpecificParkingDeckScreenState createState() => _SpecificParkingDeckScreenState();
+  _SpecificParkingDeckScreenState createState() =>
+      _SpecificParkingDeckScreenState();
 }
 
 class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
@@ -21,22 +22,25 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
     var collection = FirebaseFirestore.instance.collection('parkingDecks');
 
     try {
-      var querySnapshot = await collection.where('deck_name', isEqualTo: _deckName).get();
+      var querySnapshot =
+          await collection.where('deck_name', isEqualTo: _deckName).get();
 
       if (querySnapshot.docs.isNotEmpty) {
         var deckData = querySnapshot.docs.first.data();
-        var parkingSpotsCollection = collection.doc(querySnapshot.docs.first.id).collection('parkingSpots');
+        var parkingSpotsCollection = collection
+            .doc(querySnapshot.docs.first.id)
+            .collection('parkingSpots');
         var parkingSpotsSnapshot = await parkingSpotsCollection.get();
-        
+
         List<String> spotsDetails = [];
         for (var spot in parkingSpotsSnapshot.docs) {
           var spotData = spot.data();
-          spotsDetails.add('Spot ID: ${spot.id}, Level: ${spotData['level_no']}');
+          spotsDetails
+              .add('Spot ID: ${spot.id}, Level: ${spotData['level_no']}');
         }
 
         setState(() {
-          _deckInfo =
-              'Parking Deck Name: ${deckData['deck_name']}\n'
+          _deckInfo = 'Parking Deck Name: ${deckData['deck_name']}\n'
               'Admin ID: ${deckData['admin_id']}\n'
               'Created At: ${deckData['created_at']}\n'
               'Level Count: ${deckData['level_count']}\n'
@@ -55,7 +59,7 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
       });
     } finally {
       setState(() {
-        _isLoading = false; 
+        _isLoading = false;
       });
     }
   }
@@ -91,17 +95,21 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
               ),
               style: TextStyle(color: Colors.white),
               onChanged: (value) {
-                _deckName = value.trim(); 
+                _deckName = value.trim();
                 setState(() {});
               },
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _deckName.isNotEmpty && !_isLoading ? _searchParkingDeck : null,
+              onPressed: _deckName.isNotEmpty && !_isLoading
+                  ? _searchParkingDeck
+                  : null,
               style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(Colors.blueAccent[700]), // Dark blue color
+                backgroundColor:
+                    WidgetStateProperty.all(Colors.blueAccent[700]),
                 foregroundColor: WidgetStateProperty.all(Colors.white),
-                padding: WidgetStateProperty.all(EdgeInsets.symmetric(horizontal: 40, vertical: 15)),
+                padding: WidgetStateProperty.all(
+                    EdgeInsets.symmetric(horizontal: 40, vertical: 15)),
               ),
               child: Text(
                 _isLoading ? 'Searching...' : 'Search',

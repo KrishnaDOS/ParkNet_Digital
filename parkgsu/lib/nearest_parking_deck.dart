@@ -3,7 +3,8 @@ import 'package:geolocator/geolocator.dart';
 
 class NearestParkingDeckScreen extends StatefulWidget {
   @override
-  _NearestParkingDeckScreenState createState() => _NearestParkingDeckScreenState();
+  _NearestParkingDeckScreenState createState() =>
+      _NearestParkingDeckScreenState();
 }
 
 class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
@@ -31,7 +32,8 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.whileInUse && permission != LocationPermission.always) {
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
         setState(() {
           _locationMessage = 'Location permissions are denied.';
         });
@@ -39,10 +41,12 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
       }
     }
 
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     setState(() {
-      _locationMessage = 'Current location: ${position.latitude}, ${position.longitude}';
-      _nearestDeckInfo = "Nearest Parking Deck: GSU Parking Deck K\nDistance: 0.5 miles"; 
+      _locationMessage =
+          'Current location: ${position.latitude}, ${position.longitude}';
+      _nearestDeckInfo = "This will be implemented soon!";
     });
   }
 
@@ -75,7 +79,9 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
               ),
               SizedBox(height: 20),
               Text(
-                _nearestDeckInfo.isNotEmpty ? _nearestDeckInfo : "Searching for nearest parking deck...",
+                _nearestDeckInfo.isNotEmpty
+                    ? _nearestDeckInfo
+                    : "Searching for nearest parking deck...",
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.white,

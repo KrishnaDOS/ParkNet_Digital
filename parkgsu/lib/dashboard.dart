@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
 import 'events.dart';
 
 class Dashboard extends StatelessWidget {
@@ -22,37 +23,24 @@ class Dashboard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildDashboardItem(
-              context, 
-              'Parking Reservation', 
-              Icons.local_parking, 
-              Colors.lightBlueAccent, 
-              () {
-                Navigator.pushNamed(context, '/parkingReservation');
-              }
-            ),
+            _buildDashboardItem(context, 'Parking Reservation',
+                Icons.local_parking, Colors.lightBlueAccent, () {
+              Navigator.pushNamed(context, '/parkingReservation');
+            }),
+            SizedBox(height: 20),
+            _buildDashboardItem(context, 'Customer Support',
+                Icons.support_agent, Colors.redAccent, () {
+              // Add action for Customer Support here
+            }),
             SizedBox(height: 20),
             _buildDashboardItem(
-              context, 
-              'Customer Support', 
-              Icons.support_agent, 
-              Colors.redAccent, 
-              () {
-              }
-            ),
-            SizedBox(height: 20),
-            _buildDashboardItem(
-              context, 
-              'Local Event Finder', 
-              Icons.event, 
-              Colors.greenAccent, 
-              () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => EventsPage()),
-                );
-              }
-            ),
+                context, 'Local Event Finder', Icons.event, Colors.greenAccent,
+                () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EventsPage()),
+              );
+            }),
             SizedBox(height: 30),
             _buildLogoutButton(context),
           ],
@@ -61,8 +49,8 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildDashboardItem(
-      BuildContext context, String title, IconData icon, Color color, VoidCallback onTap) {
+  Widget _buildDashboardItem(BuildContext context, String title, IconData icon,
+      Color color, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Card(
@@ -103,7 +91,17 @@ class Dashboard extends StatelessWidget {
 
   Widget _buildLogoutButton(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        try {
+          await FirebaseAuth.instance.signOut(); // Sign out the user
+          Navigator.pushReplacementNamed(
+              context, '/'); // Navigate back to the login page
+        } catch (e) {
+          // Handle error
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error logging out: $e')),
+          );
+        }
       },
       child: Card(
         color: Colors.redAccent,
@@ -117,8 +115,8 @@ class Dashboard extends StatelessWidget {
           child: Text(
             'Logout',
             style: TextStyle(
-              color: Colors.white, 
-              fontSize: 20, 
+              color: Colors.white,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
