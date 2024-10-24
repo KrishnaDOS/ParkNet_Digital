@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'login.dart'; // Import your login page here
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -21,12 +22,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Future<void> registerUser() async {
     if (_formKey.currentState!.validate()) {
       try {
-        UserCredential userCredential =
-            await _auth.createUserWithEmailAndPassword(
+        // Create user
+        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
 
+        // Save user details to Firestore
         await FirebaseFirestore.instance
             .collection('users')
             .doc(userCredential.user?.uid)
@@ -36,10 +38,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
           'created_at': FieldValue.serverTimestamp(),
         });
 
+        // Show success message
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Registration successful')));
-        Navigator.pushNamed(context, '/');
+
+        // Navigate to the login screen and clear the back stack
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginPage()), // Replace with your actual LoginPage widget
+          (Route<dynamic> route) => false, // This removes all previous routes
+        );
       } on FirebaseAuthException catch (e) {
+        // Show error message
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(e.message ?? 'Error')));
       }

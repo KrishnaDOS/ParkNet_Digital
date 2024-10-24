@@ -6,6 +6,7 @@ import 'login.dart';
 import 'dashboard.dart';
 import 'parking_reservation.dart';
 import 'nearest_parking_deck.dart';
+import 'specific_parking_deck.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         '/dashboard': (context) => Dashboard(),
         '/parkingReservation': (context) => ParkingReservation(),
         '/nearestParkingDeck': (context) => NearestParkingDeckScreen(),
-        // '/specificParkingDeck': (context) => SpecificParkingDeckScreen(), 
+        '/specificParkingDeck': (context) => SpecificParkingDeckScreen(), 
       },
     );
   }
