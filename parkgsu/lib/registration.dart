@@ -67,6 +67,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
         centerTitle: true,
         backgroundColor: Colors.blueAccent[700],
         elevation: 4,
+        titleTextStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 24,
+          fontWeight: FontWeight.bold
+        )
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -182,7 +187,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 onPressed: registerUser,
                 child: const Text('Register'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlueAccent,
+                  backgroundColor: Colors.blueAccent[700],
+                  foregroundColor: Colors.white,
                 ),
               ),
             ],

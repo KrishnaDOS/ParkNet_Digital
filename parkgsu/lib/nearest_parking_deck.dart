@@ -57,7 +57,7 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
       appBar: AppBar(
         title: const Text(
           'Nearest Parking Deck',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white,fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.blueAccent[700],

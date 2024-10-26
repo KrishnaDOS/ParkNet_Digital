@@ -17,6 +17,11 @@ class Dashboard extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.blueAccent[700],
         elevation: 4,
+        titleTextStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        )
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

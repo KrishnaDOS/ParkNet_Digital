@@ -39,6 +39,11 @@ class _LoginPageState extends State<LoginPage> {
         centerTitle: true,
         backgroundColor: Colors.blueAccent[700],
         elevation: 4,
+        titleTextStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 24,
+          fontWeight: FontWeight.bold
+        )
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -85,7 +90,8 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: loginUser,
                 child: const Text('Login'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlueAccent,
+                  backgroundColor: Colors.blueAccent[700],
+                  foregroundColor: Colors.white,
                 ),
               ),
               TextButton(

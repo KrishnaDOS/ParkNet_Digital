@@ -71,7 +71,7 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
       appBar: AppBar(
         title: const Text(
           'Search Specific Parking Deck',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.blueAccent[700],

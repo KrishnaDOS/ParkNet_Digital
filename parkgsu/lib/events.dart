@@ -10,7 +10,7 @@ class EventsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'Local Events',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.blueAccent[700],
