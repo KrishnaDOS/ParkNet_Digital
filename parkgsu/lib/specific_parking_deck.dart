@@ -23,34 +23,37 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
 
     try {
       var querySnapshot =
-          await collection.where('deck_name', isEqualTo: _deckName).get();
+          await collection.get();  // Get all documents first
 
       if (querySnapshot.docs.isNotEmpty) {
-        var deckData = querySnapshot.docs.first.data();
-        var parkingSpotsCollection = collection
-            .doc(querySnapshot.docs.first.id)
-            .collection('parkingSpots');
-        var parkingSpotsSnapshot = await parkingSpotsCollection.get();
-
-        List<String> spotsDetails = [];
-        for (var spot in parkingSpotsSnapshot.docs) {
-          var spotData = spot.data();
-          spotsDetails
-              .add('Spot ID: ${spot.id}, Level: ${spotData['level_no']}');
+        // Iterate over all documents to perform a case-insensitive search
+        var deckData;
+        for (var doc in querySnapshot.docs) {
+          if ((doc.data()['deck_name'] as String).toLowerCase() == _deckName.toLowerCase()) {
+            deckData = doc.data();
+            break;
+          }
         }
 
-        setState(() {
-          _deckInfo = 'Parking Deck Name: ${deckData['deck_name']}\n'
-              'Admin ID: ${deckData['admin_id']}\n'
-              'Created At: ${deckData['created_at']}\n'
-              'Level Count: ${deckData['level_count']}\n'
-              'Location ID: ${deckData['location_id']}\n'
-              'Spot Count: ${deckData['spot_count']}\n\n'
-              'Parking Spots:\n${spotsDetails.join('\n')}';
-        });
+        if (deckData != null) {
+          int spotCount = deckData['spot_count'] ?? 0;
+          int reservedCount = deckData['reserved_count'] ?? 0;
+          int openSpots = spotCount - reservedCount;
+
+          setState(() {
+            _deckInfo = 'Parking Deck Name: ${deckData['deck_name']}\n'
+                'Total Spots: $spotCount\n'
+                'Reserved Spots: $reservedCount\n'
+                'Open Spots: $openSpots';
+          });
+        } else {
+          setState(() {
+            _deckInfo = 'No parking deck found with that name.';
+          });
+        }
       } else {
         setState(() {
-          _deckInfo = 'No parking deck found with that name.';
+          _deckInfo = 'No parking decks available.';
         });
       }
     } catch (e) {
@@ -105,8 +108,7 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
                   ? _searchParkingDeck
                   : null,
               style: ButtonStyle(
-                backgroundColor:
-                    WidgetStateProperty.all(Colors.blueAccent[700]),
+                backgroundColor: WidgetStateProperty.all(Colors.blueAccent[700]),
                 foregroundColor: WidgetStateProperty.all(Colors.white),
                 padding: WidgetStateProperty.all(
                     EdgeInsets.symmetric(horizontal: 40, vertical: 15)),
