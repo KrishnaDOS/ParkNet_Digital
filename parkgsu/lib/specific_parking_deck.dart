@@ -11,6 +11,7 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
   String _deckName = '';
   String _deckInfo = '';
   bool _isLoading = false;
+  int _openSpots = 0;
 
   Future<void> _searchParkingDeck() async {
     setState(() {
@@ -43,6 +44,7 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
                 'Total Spots: $spotCount\n'
                 'Reserved Spots: $reservedCount\n'
                 'Open Spots: $openSpots';
+                _openSpots = openSpots;
           });
         } else {
           setState(() {
@@ -149,7 +151,7 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _deckInfo.isNotEmpty && !_isLoading
+      bottomNavigationBar: _deckInfo.isNotEmpty && !_isLoading && _openSpots>0
           ? Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
