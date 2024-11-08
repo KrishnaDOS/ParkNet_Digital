@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -22,11 +24,9 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
     var collection = FirebaseFirestore.instance.collection('parkingDecks');
 
     try {
-      var querySnapshot =
-          await collection.get();  // Get all documents first
+      var querySnapshot = await collection.get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // Iterate over all documents to perform a case-insensitive search
         var deckData;
         for (var doc in querySnapshot.docs) {
           if ((doc.data()['deck_name'] as String).toLowerCase() == _deckName.toLowerCase()) {
@@ -67,6 +67,24 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
     }
   }
 
+  final List<String> PDecks = [
+    'B Deck',
+    'C Deck',
+    'E Deck',
+    'G Deck',
+    'H Deck',
+    'K Deck',
+    'L Deck',
+    'M Deck',
+    'N Deck',
+    'R Deck',
+    'S Deck',
+    'T Deck',
+    'U Deck',
+    'V Deck',
+    'Z Deck',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,43 +98,32 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
         backgroundColor: Colors.blueAccent[700],
         elevation: 4,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
+      body: Center(
+        child: SingleChildScrollView(
+        //padding: const EdgeInsets.all(55.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Enter parking deck name',
-                hintStyle: TextStyle(color: Colors.grey[300]),
-                filled: true,
-                fillColor: Colors.blueGrey[800],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              style: TextStyle(color: Colors.white),
-              onChanged: (value) {
-                _deckName = value.trim();
-                setState(() {});
-              },
-            ),
             SizedBox(height: 20),
+            DropdownButton(
+              //isDense: true,
+              hint: Text('Select Parking Deck', style: TextStyle(color: Colors.white)),
+              value: _deckName.isEmpty ? null : _deckName,
+              items: PDecks.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _deckName = value!;
+                });
+              },
+              dropdownColor: Colors.blueGrey[700],
+              style: TextStyle(color: Colors.white),
+            ),
+            SizedBox(height: 10),
             ElevatedButton(
-              onPressed: _deckName.isNotEmpty && !_isLoading
-                  ? _searchParkingDeck
-                  : null,
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(Colors.blueAccent[700]),
-                foregroundColor: WidgetStateProperty.all(Colors.white),
-                padding: WidgetStateProperty.all(
-                    EdgeInsets.symmetric(horizontal: 40, vertical: 15)),
-              ),
-              child: Text(
-                _isLoading ? 'Searching...' : 'Search',
-                style: TextStyle(fontSize: 18),
-              ),
+              onPressed: _searchParkingDeck,
+              child: _isLoading
+                  ? CircularProgressIndicator(color: Colors.white)
+                  : Text('Get Info', style: TextStyle(fontSize: 18)),
             ),
             SizedBox(height: 20),
             Text(
@@ -131,6 +138,6 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
           ],
         ),
       ),
-    );
+    ));
   }
 }
