@@ -8,7 +8,6 @@ class SpecificParkingDeckScreen extends StatefulWidget {
 }
 
 class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
-  
   String _deckName = '';
   String _deckInfo = '';
   bool _isLoading = false;
@@ -27,7 +26,8 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
       if (querySnapshot.docs.isNotEmpty) {
         var deckData;
         for (var doc in querySnapshot.docs) {
-          if ((doc.data()['deck_name'] as String).toLowerCase() == _deckName.toLowerCase()) {
+          if ((doc.data()['deck_name'] as String).toLowerCase() ==
+              _deckName.toLowerCase()) {
             deckData = doc.data();
             break;
           }
@@ -90,7 +90,8 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
       appBar: AppBar(
         title: const Text(
           'Search Specific Parking Deck',
-          style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.blueAccent[700],
@@ -98,44 +99,79 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
       ),
       body: Center(
         child: SingleChildScrollView(
-        
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 20),
-            DropdownButton(
-              
-              hint: Text('Select Parking Deck', style: TextStyle(color: Colors.white)),
-              value: _deckName.isEmpty ? null : _deckName,
-              items: PDecks.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-              onChanged: (value) {
-                setState(() {
-                  _deckName = value!;
-                });
-              },
-              dropdownColor: Colors.blueGrey[700],
-              style: TextStyle(color: Colors.white),
-            ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: _searchParkingDeck,
-              child: _isLoading
-                  ? CircularProgressIndicator(color: Colors.white)
-                  : Text('Get Info', style: TextStyle(fontSize: 18)),
-            ),
-            SizedBox(height: 20),
-            Text(
-              _deckInfo,
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 20),
+              DropdownButton(
+                hint: Text('Select Parking Deck',
+                    style: TextStyle(color: Colors.white)),
+                value: _deckName.isEmpty ? null : _deckName,
+                items: PDecks.map(
+                    (e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _deckName = value!;
+                  });
+                },
+                dropdownColor: Colors.blueGrey[700],
+                style: TextStyle(color: Colors.white),
               ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: _searchParkingDeck,
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 40, vertical: 15), // Create an oval button
+                  backgroundColor: Colors.blueAccent[700],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        30), // Rounded edges for oval appearance
+                  ),
+                ),
+                child: _isLoading
+                    ? CircularProgressIndicator(color: Colors.white)
+                    : Text('Search',
+                        style: TextStyle(
+                            fontSize: 18, color: Colors.white)), // Text button
+              ),
+              SizedBox(height: 20),
+              Text(
+                _deckInfo,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
-    ));
+      bottomNavigationBar: _deckInfo.isNotEmpty && !_isLoading
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Navigate to the reservation screen and pass the selected deck name
+                  Navigator.pushNamed(context, '/reserveSpot',
+                      arguments: _deckName);
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: Colors.blueAccent[700],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  'Reserve Spot',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+              ),
+            )
+          : null,
+    );
   }
 }

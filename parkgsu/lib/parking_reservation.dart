@@ -8,19 +8,18 @@ class ParkingReservation extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.blueGrey[900],
       appBar: AppBar(
-        title: const Text(
-          'Parking Reservation',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.blueAccent[700],
-        elevation: 4,
-        titleTextStyle: const TextStyle(
-          color: Colors.white,
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        )
-      ),
+          title: const Text(
+            'Parking Reservation',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.blueAccent[700],
+          elevation: 4,
+          titleTextStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          )),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -57,8 +56,8 @@ class ParkingReservation extends StatelessWidget {
     );
   }
 
-  Widget _buildReservationOption(
-      BuildContext context, String title, IconData icon, Color color, String route) {
+  Widget _buildReservationOption(BuildContext context, String title,
+      IconData icon, Color color, String route) {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, route);
@@ -101,6 +100,3 @@ class ParkingReservation extends StatelessWidget {
     );
   }
 }
-
-
-
