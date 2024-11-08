@@ -49,7 +49,7 @@ class _ReserveSpotScreenState extends State<ReserveSpotScreen> {
             SizedBox(height: 20),
             // Slider to select parking hours
             Text(
-              'Select Duration: ${_hours.toStringAsFixed(0)} hours',
+              'Select Duration: ${_hours.toStringAsFixed(0)} hour(s)',
               style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             SizedBox(height: 20),
