@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -10,7 +8,7 @@ class SpecificParkingDeckScreen extends StatefulWidget {
 }
 
 class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
-  TextEditingController _searchController = TextEditingController();
+  
   String _deckName = '';
   String _deckInfo = '';
   bool _isLoading = false;
@@ -100,13 +98,13 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
       ),
       body: Center(
         child: SingleChildScrollView(
-        //padding: const EdgeInsets.all(55.0),
+        
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(height: 20),
             DropdownButton(
-              //isDense: true,
+              
               hint: Text('Select Parking Deck', style: TextStyle(color: Colors.white)),
               value: _deckName.isEmpty ? null : _deckName,
               items: PDecks.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
