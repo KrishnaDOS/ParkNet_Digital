@@ -7,6 +7,7 @@ import 'dashboard.dart';
 import 'parking_reservation.dart';
 import 'nearest_parking_deck.dart';
 import 'specific_parking_deck.dart';
+import 'reservation.dart'; // Add this import
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,6 +35,15 @@ class MyApp extends StatelessWidget {
         '/parkingReservation': (context) => ParkingReservation(),
         '/nearestParkingDeck': (context) => NearestParkingDeckScreen(),
         '/specificParkingDeck': (context) => SpecificParkingDeckScreen(),
+        '/reserveSpot': (context) {
+          // Ensure selectedDeck is passed when navigating
+          final String selectedDeck =
+              ModalRoute.of(context)!.settings.arguments as String? ??
+                  'Unknown Deck';
+          return ReserveSpotScreen(
+            selectedDeck: selectedDeck, // Pass selectedDeck here
+          );
+        },
       },
     );
   }

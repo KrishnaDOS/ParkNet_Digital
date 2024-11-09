@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 class NearestParkingDeckScreen extends StatefulWidget {
   const NearestParkingDeckScreen({super.key});
@@ -12,6 +14,8 @@ class NearestParkingDeckScreen extends StatefulWidget {
 class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
   String _locationMessage = "Finding nearest parking deck...";
   String _nearestDeckInfo = "";
+  LatLng? _currentLocation;
+  final MapController _mapController = MapController();
 
   @override
   void initState() {
@@ -43,13 +47,27 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
       }
     }
 
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    setState(() {
-      _locationMessage =
-          'Current location: ${position.latitude}, ${position.longitude}';
-      _nearestDeckInfo = "This will be implemented soon!";
-    });
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      setState(() {
+        _locationMessage =
+            'Current location: ${position.latitude}, ${position.longitude}';
+        _nearestDeckInfo = "This will be implemented soon!";
+        _currentLocation = LatLng(position.latitude, position.longitude);
+      });
+
+      if (_currentLocation != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _mapController.move(_currentLocation!, 15);
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _locationMessage = 'Failed to get location: $e';
+      });
+      print("Error fetching location: $e");
+    }
   }
 
   @override
@@ -59,7 +77,7 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
       appBar: AppBar(
         title: const Text(
           'Nearest Parking Deck',
-          style: TextStyle(color: Colors.white,fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.blueAccent[700],
@@ -91,6 +109,42 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
                 ),
                 textAlign: TextAlign.center,
               ),
+              SizedBox(height: 20),
+              _currentLocation == null
+                  ? CircularProgressIndicator()
+                  : Container(
+                      height: 300,
+                      width: double.infinity,
+                      child: FlutterMap(
+                        mapController: _mapController,
+                        options: MapOptions(
+                          initialCenter: _currentLocation ?? LatLng(0, 0),
+                          minZoom: 10.0,
+                          maxZoom: 18.0,
+                        ),
+                        children: [
+                          TileLayer(
+                            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            userAgentPackageName: 'com.example.parkgsu',
+                          ),
+                          MarkerLayer(
+                            markers: [
+                              if (_currentLocation != null)
+                                Marker(
+                                  point: _currentLocation!,
+                                  width: 30.0,
+                                  height: 30.0,
+                                  child: Icon(
+                                    Icons.location_on,
+                                    color: Colors.red,
+                                    size: 30,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
             ],
           ),
         ),

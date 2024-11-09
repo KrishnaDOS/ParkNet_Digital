@@ -14,6 +14,7 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
   String _deckName = '';
   String _deckInfo = '';
   bool _isLoading = false;
+  int _openSpots = 0;
 
   Future<void> _searchParkingDeck() async {
     setState(() {
@@ -24,35 +25,38 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
     var collection = FirebaseFirestore.instance.collection('parkingDecks');
 
     try {
-      var querySnapshot =
-          await collection.where('deck_name', isEqualTo: _deckName).get();
+      var querySnapshot = await collection.get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        var deckData = querySnapshot.docs.first.data();
-        var parkingSpotsCollection = collection
-            .doc(querySnapshot.docs.first.id)
-            .collection('parkingSpots');
-        var parkingSpotsSnapshot = await parkingSpotsCollection.get();
-
-        List<String> spotsDetails = [];
-        for (var spot in parkingSpotsSnapshot.docs) {
-          var spotData = spot.data();
-          spotsDetails
-              .add('Spot ID: ${spot.id}, Level: ${spotData['level_no']}');
+        var deckData;
+        for (var doc in querySnapshot.docs) {
+          if ((doc.data()['deck_name'] as String).toLowerCase() ==
+              _deckName.toLowerCase()) {
+            deckData = doc.data();
+            break;
+          }
         }
 
-        setState(() {
-          _deckInfo = 'Parking Deck Name: ${deckData['deck_name']}\n'
-              'Admin ID: ${deckData['admin_id']}\n'
-              'Created At: ${deckData['created_at']}\n'
-              'Level Count: ${deckData['level_count']}\n'
-              'Location ID: ${deckData['location_id']}\n'
-              'Spot Count: ${deckData['spot_count']}\n\n'
-              'Parking Spots:\n${spotsDetails.join('\n')}';
-        });
+        if (deckData != null) {
+          int spotCount = deckData['spot_count'] ?? 0;
+          int reservedCount = deckData['reserved_count'] ?? 0;
+          int openSpots = spotCount - reservedCount;
+
+          setState(() {
+            _deckInfo = 'Parking Deck Name: ${deckData['deck_name']}\n'
+                'Total Spots: $spotCount\n'
+                'Reserved Spots: $reservedCount\n'
+                'Open Spots: $openSpots';
+                _openSpots = openSpots;
+          });
+        } else {
+          setState(() {
+            _deckInfo = 'No parking deck found with that name.';
+          });
+        }
       } else {
         setState(() {
-          _deckInfo = 'No parking deck found with that name.';
+          _deckInfo = 'No parking decks available.';
         });
       }
     } catch (e) {
@@ -66,6 +70,24 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
     }
   }
 
+  final List<String> PDecks = [
+    'B Deck',
+    'C Deck',
+    'E Deck',
+    'G Deck',
+    'H Deck',
+    'K Deck',
+    'L Deck',
+    'M Deck',
+    'N Deck',
+    'R Deck',
+    'S Deck',
+    'T Deck',
+    'U Deck',
+    'V Deck',
+    'Z Deck',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,64 +95,88 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
       appBar: AppBar(
         title: const Text(
           'Search Specific Parking Deck',
-          style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.blueAccent[700],
         elevation: 4,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Enter parking deck name',
-                hintStyle: TextStyle(color: Colors.grey[300]),
-                filled: true,
-                fillColor: Colors.blueGrey[800],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 20),
+              DropdownButton(
+                hint: Text('Select Parking Deck',
+                    style: TextStyle(color: Colors.white)),
+                value: _deckName.isEmpty ? null : _deckName,
+                items: PDecks.map(
+                    (e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _deckName = value!;
+                  });
+                },
+                dropdownColor: Colors.blueGrey[700],
+                style: TextStyle(color: Colors.white),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: _searchParkingDeck,
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 40, vertical: 15), // Create an oval button
+                  backgroundColor: Colors.blueAccent[700],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        30), // Rounded edges for oval appearance
+                  ),
                 ),
+                child: _isLoading
+                    ? CircularProgressIndicator(color: Colors.white)
+                    : Text('Search',
+                        style: TextStyle(
+                            fontSize: 18, color: Colors.white)), // Text button
               ),
-              style: TextStyle(color: Colors.white),
-              onChanged: (value) {
-                _deckName = value.trim();
-                setState(() {});
-              },
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _deckName.isNotEmpty && !_isLoading
-                  ? _searchParkingDeck
-                  : null,
-              style: ButtonStyle(
-                backgroundColor:
-                    WidgetStateProperty.all(Colors.blueAccent[700]),
-                foregroundColor: WidgetStateProperty.all(Colors.white),
-                padding: WidgetStateProperty.all(
-                    EdgeInsets.symmetric(horizontal: 40, vertical: 15)),
+              SizedBox(height: 20),
+              Text(
+                _deckInfo,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
               ),
-              child: Text(
-                _isLoading ? 'Searching...' : 'Search',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              _deckInfo,
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+      bottomNavigationBar: _deckInfo.isNotEmpty && !_isLoading && _openSpots>0
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Navigate to the reservation screen and pass the selected deck name
+                  Navigator.pushNamed(context, '/reserveSpot',
+                      arguments: _deckName);
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: Colors.blueAccent[700],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  'Reserve Spot',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+              ),
+            )
+          : null,
     );
   }
 }

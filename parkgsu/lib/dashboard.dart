@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
+import 'package:firebase_auth/firebase_auth.dart';
+import 'customer_support.dart';
 import 'events.dart';
 
 class Dashboard extends StatelessWidget {
@@ -21,7 +22,7 @@ class Dashboard extends StatelessWidget {
           color: Colors.white,
           fontSize: 24,
           fontWeight: FontWeight.bold,
-        )
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -35,7 +36,11 @@ class Dashboard extends StatelessWidget {
             SizedBox(height: 20),
             _buildDashboardItem(context, 'Customer Support',
                 Icons.support_agent, Colors.redAccent, () {
-              // Add action for Customer Support here
+              // Navigate to the Customer Support page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CustomerSupportPage()),
+              );
             }),
             SizedBox(height: 20),
             _buildDashboardItem(
@@ -98,11 +103,10 @@ class Dashboard extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         try {
-          await FirebaseAuth.instance.signOut(); // Sign out the user
+          await FirebaseAuth.instance.signOut();
           Navigator.pushReplacementNamed(
-              context, '/'); // Navigate back to the login page
+              context, '/');
         } catch (e) {
-          // Handle error
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Error logging out: $e')),
           );
