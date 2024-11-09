@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
 import 'events.dart';
 
 class Dashboard extends StatelessWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  const Dashboard({super.key});
 
   @override
   Widget build(BuildContext context) {

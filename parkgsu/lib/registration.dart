@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'login.dart'; // Import your login page here
 
 class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({super.key});
+
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
 }
@@ -185,11 +187,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
               ElevatedButton(
                 onPressed: registerUser,
-                child: const Text('Register'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent[700],
                   foregroundColor: Colors.white,
                 ),
+                child: const Text('Register'),
               ),
             ],
           ),

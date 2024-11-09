@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SpecificParkingDeckScreen extends StatefulWidget {
+  const SpecificParkingDeckScreen({super.key});
+
   @override
   _SpecificParkingDeckScreenState createState() =>
       _SpecificParkingDeckScreenState();
 }
 
 class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   String _deckName = '';
   String _deckInfo = '';
   bool _isLoading = false;

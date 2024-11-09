@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 class NearestParkingDeckScreen extends StatefulWidget {
+  const NearestParkingDeckScreen({super.key});
+
   @override
   _NearestParkingDeckScreenState createState() =>
       _NearestParkingDeckScreenState();

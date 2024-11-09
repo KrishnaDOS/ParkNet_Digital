@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ParkingReservation extends StatelessWidget {
-  const ParkingReservation({Key? key}) : super(key: key);
+  const ParkingReservation({super.key});
 
   @override
   Widget build(BuildContext context) {
