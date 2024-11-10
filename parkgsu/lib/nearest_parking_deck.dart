@@ -112,7 +112,7 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
               SizedBox(height: 20),
               _currentLocation == null
                   ? CircularProgressIndicator()
-                  : Container(
+                  : SizedBox(
                       height: 300,
                       width: double.infinity,
                       child: FlutterMap(

@@ -28,7 +28,7 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
       var querySnapshot = await collection.get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        var deckData;
+        Map<String, dynamic> deckData;
         for (var doc in querySnapshot.docs) {
           if ((doc.data()['deck_name'] as String).toLowerCase() ==
               _deckName.toLowerCase()) {

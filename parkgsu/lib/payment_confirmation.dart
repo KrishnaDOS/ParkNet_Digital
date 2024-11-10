@@ -4,7 +4,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 class PaymentConfirmationPage extends StatelessWidget {
   final String qrData;
 
-  const PaymentConfirmationPage({Key? key, required this.qrData}) : super(key: key);
+  const PaymentConfirmationPage({super.key, required this.qrData});
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 class PaymentPage extends StatefulWidget {
   final double amount;
 
-  const PaymentPage({Key? key, required this.amount}) : super(key: key);
+  const PaymentPage({super.key, required this.amount});
 
   @override
   _PaymentPageState createState() => _PaymentPageState();

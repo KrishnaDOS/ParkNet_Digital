@@ -4,7 +4,7 @@ import 'payment_page.dart';
 class ReserveSpotScreen extends StatefulWidget {
   final String selectedDeck;
 
-  const ReserveSpotScreen({Key? key, required this.selectedDeck}) : super(key: key);
+  const ReserveSpotScreen({super.key, required this.selectedDeck});
 
   @override
   _ReserveSpotScreenState createState() => _ReserveSpotScreenState();
