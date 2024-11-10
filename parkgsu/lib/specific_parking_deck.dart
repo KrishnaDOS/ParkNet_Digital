@@ -10,7 +10,6 @@ class SpecificParkingDeckScreen extends StatefulWidget {
 }
 
 class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
-  final TextEditingController _searchController = TextEditingController();
   String _deckName = '';
   String _deckInfo = '';
   bool _isLoading = false;
