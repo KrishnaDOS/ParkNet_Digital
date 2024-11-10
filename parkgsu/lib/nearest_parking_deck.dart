@@ -85,24 +85,48 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
       var querySnapshot = await collection.get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        var nearestDeck = querySnapshot.docs.first;
+        double nearestDistance = double.infinity;
+        QueryDocumentSnapshot? nearestDeck;
+
         for (var doc in querySnapshot.docs) {
-          nearestDeck = doc;
+          var data = doc.data() as Map<String, dynamic>;
+          double? deckLatitude = data['latitude'] as double?;
+          double? deckLongitude = data['longitude'] as double?;
+
+          if (deckLatitude != null && deckLongitude != null) {
+            double distance = Geolocator.distanceBetween(
+              _currentLocation!.latitude,
+              _currentLocation!.longitude,
+              deckLatitude,
+              deckLongitude,
+            );
+
+            if (distance < nearestDistance) {
+              nearestDistance = distance;
+              nearestDeck = doc;
+            }
+          }
         }
 
-        var deckData = nearestDeck.data();
-        int spotCount = deckData['spot_count'] ?? 0;
-        int reservedCount = deckData['reserved_count'] ?? 0;
-        int openSpots = spotCount - reservedCount;
+        if (nearestDeck != null) {
+          var deckData = nearestDeck.data() as Map<String, dynamic>;
+          int spotCount = (deckData['spot_count'] ?? 0) as int;
+          int reservedCount = (deckData['reserved_count'] ?? 0) as int;
+          int openSpots = spotCount - reservedCount;
 
-        setState(() {
-          _nearestDeckInfo = 'Parking Deck Name: ${deckData['deck_name']}\n'
-              'Total Spots: $spotCount\n'
-              'Reserved Spots: $reservedCount\n'
-              'Open Spots: $openSpots';
-          _nearestDeckName = deckData['deck_name'];
-          _openSpots = openSpots;
-        });
+          setState(() {
+            _nearestDeckInfo = 'Parking Deck Name: ${deckData['deck_name'] ?? 'Unknown'}\n'
+                'Total Spots: $spotCount\n'
+                'Reserved Spots: $reservedCount\n'
+                'Open Spots: $openSpots';
+            _nearestDeckName = deckData['deck_name'] ?? '';
+            _openSpots = openSpots;
+          });
+        } else {
+          setState(() {
+            _nearestDeckInfo = 'No parking decks available.';
+          });
+        }
       } else {
         setState(() {
           _nearestDeckInfo = 'No parking decks available.';
