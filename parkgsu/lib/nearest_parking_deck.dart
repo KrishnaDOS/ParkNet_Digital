@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'reservation.dart';
 
 class NearestParkingDeckScreen extends StatefulWidget {
   const NearestParkingDeckScreen({super.key});
@@ -13,9 +15,11 @@ class NearestParkingDeckScreen extends StatefulWidget {
 
 class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
   String _locationMessage = "Finding nearest parking deck...";
-  String _nearestDeckInfo = "";
+  String _nearestDeckInfo = '';
   LatLng? _currentLocation;
   final MapController _mapController = MapController();
+  bool _isLoading = false;
+  String _nearestDeckName = '';
 
   @override
   void initState() {
@@ -53,7 +57,6 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
       setState(() {
         _locationMessage =
             'Current location: ${position.latitude}, ${position.longitude}';
-        _nearestDeckInfo = "This will be implemented soon!";
         _currentLocation = LatLng(position.latitude, position.longitude);
       });
 
@@ -61,12 +64,59 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _mapController.move(_currentLocation!, 15);
         });
+        _findNearestParkingDeck();
       }
     } catch (e) {
       setState(() {
         _locationMessage = 'Failed to get location: $e';
       });
       print("Error fetching location: $e");
+    }
+  }
+
+  Future<void> _findNearestParkingDeck() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      var collection = FirebaseFirestore.instance.collection('parkingDecks');
+      var querySnapshot = await collection.get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // Simple logic to find the nearest deck
+        // This should ideally be replaced with a proper geolocation distance calculation
+        var nearestDeck = querySnapshot.docs.first;
+        for (var doc in querySnapshot.docs) {
+          // Placeholder for nearest deck calculation
+          nearestDeck = doc;
+        }
+
+        var deckData = nearestDeck.data();
+        int spotCount = deckData['spot_count'] ?? 0;
+        int reservedCount = deckData['reserved_count'] ?? 0;
+        int openSpots = spotCount - reservedCount;
+
+        setState(() {
+          _nearestDeckInfo = 'Parking Deck Name: ${deckData['deck_name']}\n'
+              'Total Spots: $spotCount\n'
+              'Reserved Spots: $reservedCount\n'
+              'Open Spots: $openSpots';
+          _nearestDeckName = deckData['deck_name'];
+        });
+      } else {
+        setState(() {
+          _nearestDeckInfo = 'No parking decks available.';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _nearestDeckInfo = 'Error fetching data. Please try again.';
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -145,6 +195,26 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
                         ],
                       ),
                     ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _nearestDeckName.isNotEmpty && !_isLoading
+                    ? () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReserveSpotScreen(
+                              selectedDeck: _nearestDeckName,
+                            ),
+                          ),
+                        );
+                      }
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: Colors.blueAccent[700],
+                ),
+                child: Text('Reserve a Spot', style: TextStyle(fontSize: 20, color: Colors.white)),
+              ),
             ],
           ),
         ),
