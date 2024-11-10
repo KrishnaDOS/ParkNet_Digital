@@ -20,6 +20,7 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
   final MapController _mapController = MapController();
   bool _isLoading = false;
   String _nearestDeckName = '';
+  int _openSpots = 0;
 
   @override
   void initState() {
@@ -84,11 +85,8 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
       var querySnapshot = await collection.get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // Simple logic to find the nearest deck
-        // This should ideally be replaced with a proper geolocation distance calculation
         var nearestDeck = querySnapshot.docs.first;
         for (var doc in querySnapshot.docs) {
-          // Placeholder for nearest deck calculation
           nearestDeck = doc;
         }
 
@@ -103,6 +101,7 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
               'Reserved Spots: $reservedCount\n'
               'Open Spots: $openSpots';
           _nearestDeckName = deckData['deck_name'];
+          _openSpots = openSpots;
         });
       } else {
         setState(() {
@@ -195,27 +194,35 @@ class _NearestParkingDeckScreenState extends State<NearestParkingDeckScreen> {
                         ],
                       ),
                     ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _nearestDeckName.isNotEmpty && !_isLoading
-                    ? () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ReserveSpotScreen(
-                              selectedDeck: _nearestDeckName,
-                            ),
-                          ),
-                        );
-                      }
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: Colors.blueAccent[700],
-                ),
-                child: Text('Reserve a Spot', style: TextStyle(fontSize: 20, color: Colors.white)),
-              ),
             ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          onPressed: _nearestDeckName.isNotEmpty && _openSpots > 0 && !_isLoading
+              ? () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ReserveSpotScreen(
+                        selectedDeck: _nearestDeckName,
+                      ),
+                    ),
+                  );
+                }
+              : null,
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            backgroundColor: _openSpots > 0 ? Colors.blueAccent[700] : Colors.grey,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: Text(
+            'Reserve Spot',
+            style: TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
       ),

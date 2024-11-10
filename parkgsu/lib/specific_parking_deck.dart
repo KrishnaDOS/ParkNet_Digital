@@ -30,7 +30,7 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
       if (querySnapshot.docs.isNotEmpty) {
         var deckData;
         for (var doc in querySnapshot.docs) {
-          if ((doc.data()['deck_name'] as String).toLowerCase() ==
+          if ((doc.data()['deck_name'] as String).toLowerCase() == 
               _deckName.toLowerCase()) {
             deckData = doc.data();
             break;
@@ -47,7 +47,7 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
                 'Total Spots: $spotCount\n'
                 'Reserved Spots: $reservedCount\n'
                 'Open Spots: $openSpots';
-                _openSpots = openSpots;
+            _openSpots = openSpots;
           });
         } else {
           setState(() {
@@ -71,21 +71,9 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
   }
 
   final List<String> PDecks = [
-    'B Deck',
-    'C Deck',
-    'E Deck',
-    'G Deck',
-    'H Deck',
-    'K Deck',
-    'L Deck',
-    'M Deck',
-    'N Deck',
-    'R Deck',
-    'S Deck',
-    'T Deck',
-    'U Deck',
-    'V Deck',
-    'Z Deck',
+    'B Deck', 'C Deck', 'E Deck', 'G Deck', 'H Deck', 'K Deck',
+    'L Deck', 'M Deck', 'N Deck', 'R Deck', 'S Deck', 'T Deck',
+    'U Deck', 'Z Deck'
   ];
 
   @override
@@ -127,18 +115,17 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
                 onPressed: _searchParkingDeck,
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(
-                      horizontal: 40, vertical: 15), // Create an oval button
+                      horizontal: 40, vertical: 15),
                   backgroundColor: Colors.blueAccent[700],
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        30), // Rounded edges for oval appearance
+                    borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                 child: _isLoading
                     ? CircularProgressIndicator(color: Colors.white)
                     : Text('Search',
                         style: TextStyle(
-                            fontSize: 18, color: Colors.white)), // Text button
+                            fontSize: 18, color: Colors.white)),
               ),
               SizedBox(height: 20),
               Text(
@@ -154,18 +141,21 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _deckInfo.isNotEmpty && !_isLoading && _openSpots>0
+      bottomNavigationBar: _deckInfo.isNotEmpty && !_isLoading
           ? Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                onPressed: () {
-                  // Navigate to the reservation screen and pass the selected deck name
-                  Navigator.pushNamed(context, '/reserveSpot',
-                      arguments: _deckName);
-                },
+                onPressed: _openSpots > 0
+                    ? () {
+                        Navigator.pushNamed(context, '/reserveSpot',
+                            arguments: _deckName);
+                      }
+                    : null,
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: Colors.blueAccent[700],
+                  backgroundColor: _openSpots > 0
+                      ? Colors.blueAccent[700]
+                      : Colors.grey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
