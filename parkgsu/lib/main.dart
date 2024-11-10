@@ -7,7 +7,9 @@ import 'dashboard.dart';
 import 'parking_reservation.dart';
 import 'nearest_parking_deck.dart';
 import 'specific_parking_deck.dart';
-import 'reservation.dart'; // Add this import
+import 'reservation.dart';
+import 'payment_page.dart';
+import 'payment_confirmation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,8 +20,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,13 +36,17 @@ class MyApp extends StatelessWidget {
         '/nearestParkingDeck': (context) => NearestParkingDeckScreen(),
         '/specificParkingDeck': (context) => SpecificParkingDeckScreen(),
         '/reserveSpot': (context) {
-          // Ensure selectedDeck is passed when navigating
           final String selectedDeck =
-              ModalRoute.of(context)!.settings.arguments as String? ??
-                  'Unknown Deck';
-          return ReserveSpotScreen(
-            selectedDeck: selectedDeck, // Pass selectedDeck here
-          );
+              ModalRoute.of(context)!.settings.arguments as String? ?? 'Unknown Deck';
+          return ReserveSpotScreen(selectedDeck: selectedDeck);
+        },
+        '/payment': (context) {
+          final double amount = ModalRoute.of(context)!.settings.arguments as double? ?? 0.0;
+          return PaymentPage(amount: amount);
+        },
+        '/confirmation': (context) {
+          final String qrData = ModalRoute.of(context)!.settings.arguments as String? ?? 'No QR Data';
+          return PaymentConfirmationPage(qrData: qrData);
         },
       },
     );
