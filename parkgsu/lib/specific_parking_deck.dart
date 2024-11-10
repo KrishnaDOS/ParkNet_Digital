@@ -10,7 +10,6 @@ class SpecificParkingDeckScreen extends StatefulWidget {
 }
 
 class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
-  final TextEditingController _searchController = TextEditingController();
   String _deckName = '';
   String _deckInfo = '';
   bool _isLoading = false;
@@ -40,7 +39,8 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
         if (deckData != null) {
           int spotCount = deckData['spot_count'] ?? 0;
           int reservedCount = deckData['reserved_count'] ?? 0;
-          int openSpots = spotCount - reservedCount;
+          int hcapCount = deckData['hcap_spot'] ?? 0;
+          int openSpots = spotCount - hcapCount - reservedCount;
 
           setState(() {
             _deckInfo = 'Parking Deck Name: ${deckData['deck_name']}\n'
