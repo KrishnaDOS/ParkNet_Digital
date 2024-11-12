@@ -7,9 +7,7 @@ import 'dashboard.dart';
 import 'parking_reservation.dart';
 import 'nearest_parking_deck.dart';
 import 'specific_parking_deck.dart';
-import 'reservation.dart';
 import 'payment_page.dart';
-import 'payment_confirmation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,18 +35,13 @@ class MyApp extends StatelessWidget {
         '/parkingReservation': (context) => ParkingReservation(),
         '/nearestParkingDeck': (context) => NearestParkingDeckScreen(),
         '/specificParkingDeck': (context) => SpecificParkingDeckScreen(),
-        '/reserveSpot': (context) {
-          final String selectedDeck =
-              ModalRoute.of(context)!.settings.arguments as String? ?? 'Unknown Deck';
-          return ReserveSpotScreen(selectedDeck: selectedDeck);
-        },
         '/payment': (context) {
-          final double amount = ModalRoute.of(context)!.settings.arguments as double? ?? 0.0;
-          return PaymentPage(amount: amount);
-        },
-        '/confirmation': (context) {
-          final String qrData = ModalRoute.of(context)!.settings.arguments as String? ?? 'No QR Data';
-          return PaymentConfirmationPage(qrData: qrData);
+          final arguments = ModalRoute.of(context)!.settings.arguments
+              as Map<String, dynamic>;
+          final double amount = arguments['amount'] ?? 0.0;
+          final String parkingDeckName =
+              arguments['parkingDeckName'] ?? 'Unknown Deck';
+          return PaymentPage(amount: amount, parkingDeckName: parkingDeckName);
         },
       },
     );
