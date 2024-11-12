@@ -71,18 +71,12 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
   }
 
   final List<String> PDecks = [
-    'B Deck',
-    'C Deck',
-    'E Deck',
     'G Deck',
-    'H Deck',
     'K Deck',
-    'L Deck',
     'M Deck',
     'N Deck',
     'S Deck',
     'T Deck',
-    'Z Deck'
   ];
 
   @override
