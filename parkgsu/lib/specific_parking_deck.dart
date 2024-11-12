@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'reservation.dart'; // Import the reservation page.
+import 'package:cloud_firestore/cloud_firestore.dart'; // Add this import
 
 class SpecificParkingDeckScreen extends StatefulWidget {
   const SpecificParkingDeckScreen({super.key});
@@ -71,12 +72,18 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
   }
 
   final List<String> PDecks = [
+    'B Deck',
+    'C Deck',
+    'E Deck',
     'G Deck',
+    'H Deck',
     'K Deck',
+    'L Deck',
     'M Deck',
     'N Deck',
     'S Deck',
     'T Deck',
+    'Z Deck'
   ];
 
   @override
@@ -148,16 +155,15 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
               child: ElevatedButton(
                 onPressed: _openSpots > 0
                     ? () {
-                        // Navigate to the payment page with deck info and open spots as arguments
-                        Navigator.pushNamed(
+                        // Navigate to the duration selection page instead of payment
+                        Navigator.push(
                           context,
-                          '/payment',
-                          arguments: {
-                            'amount':
-                                5.0, // Example amount, you can modify this
-                            'parkingDeckName': _deckName,
-                            'openSpots': _openSpots
-                          },
+                          MaterialPageRoute(
+                            builder: (context) => ReserveSpotScreen(
+                              selectedDeck:
+                                  _deckName, // Passing deck name to the duration page
+                            ),
+                          ),
                         );
                       }
                     : null,
