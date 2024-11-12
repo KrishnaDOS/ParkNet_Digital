@@ -158,14 +158,12 @@ class _PaymentPageState extends State<PaymentPage> {
         title: const Text(
           'Payment',
           style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold), // Updated style
+              color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.blueAccent[700],
       ),
       body: Container(
-        color: Colors.blueGrey[700], // Set background color to blue-grey
+        color: Colors.blueGrey[700],
         padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -175,7 +173,7 @@ class _PaymentPageState extends State<PaymentPage> {
               style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white), // Updated to white
+                  color: Colors.white),
             ),
             SizedBox(height: 30),
             TextField(
@@ -183,14 +181,18 @@ class _PaymentPageState extends State<PaymentPage> {
               decoration: InputDecoration(
                 labelText: 'Card Number',
                 hintText: 'Enter card number',
-                border: OutlineInputBorder(),
-                fillColor: Colors.white, // Set background to white
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blueAccent),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
+                ),
+                fillColor: Colors.white,
                 filled: true,
                 errorText: _cardNumberError,
-                errorStyle:
-                    TextStyle(color: Colors.redAccent), // Bright red error text
+                errorStyle: TextStyle(color: Colors.redAccent),
                 contentPadding: EdgeInsets.symmetric(
-                    vertical: 15, horizontal: 10), // Add padding
+                    vertical: 20, horizontal: 15), // Increased padding
               ),
               keyboardType: TextInputType.number,
             ),
@@ -203,14 +205,19 @@ class _PaymentPageState extends State<PaymentPage> {
                     decoration: InputDecoration(
                       labelText: 'Expiration Date (MM/YY)',
                       hintText: 'MM/YY',
-                      border: OutlineInputBorder(),
-                      fillColor: Colors.white, // Set background to white
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueAccent),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.blueAccent, width: 2.0),
+                      ),
+                      fillColor: Colors.white,
                       filled: true,
                       errorText: _expDateError,
-                      errorStyle: TextStyle(
-                          color: Colors.redAccent), // Bright red error text
+                      errorStyle: TextStyle(color: Colors.redAccent),
                       contentPadding: EdgeInsets.symmetric(
-                          vertical: 15, horizontal: 10), // Add padding
+                          vertical: 20, horizontal: 15), // Increased padding
                     ),
                     keyboardType: TextInputType.number,
                   ),
@@ -222,14 +229,19 @@ class _PaymentPageState extends State<PaymentPage> {
                     decoration: InputDecoration(
                       labelText: 'CVC',
                       hintText: 'Enter CVC',
-                      border: OutlineInputBorder(),
-                      fillColor: Colors.white, // Set background to white
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueAccent),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.blueAccent, width: 2.0),
+                      ),
+                      fillColor: Colors.white,
                       filled: true,
                       errorText: _cvcError,
-                      errorStyle: TextStyle(
-                          color: Colors.redAccent), // Bright red error text
+                      errorStyle: TextStyle(color: Colors.redAccent),
                       contentPadding: EdgeInsets.symmetric(
-                          vertical: 15, horizontal: 10), // Add padding
+                          vertical: 20, horizontal: 15), // Increased padding
                     ),
                     keyboardType: TextInputType.number,
                   ),
@@ -238,19 +250,16 @@ class _PaymentPageState extends State<PaymentPage> {
             ),
             SizedBox(height: 20),
             Center(
-              // Center the credit and debit card selection
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ChoiceChip(
                     label: Text(
                       'Credit Card',
-                      style: TextStyle(
-                          color: Colors.white), // Set text color to white
+                      style: TextStyle(color: Colors.white),
                     ),
                     selected: isCreditCard,
-                    backgroundColor: Colors.blueAccent[
-                        700], // Updated background color to blueAccent[700]
+                    backgroundColor: Colors.blueAccent[700],
                     selectedColor: Colors.blueAccent,
                     onSelected: (selected) {
                       setState(() {
@@ -262,12 +271,10 @@ class _PaymentPageState extends State<PaymentPage> {
                   ChoiceChip(
                     label: Text(
                       'Debit Card',
-                      style: TextStyle(
-                          color: Colors.white), // Set text color to white
+                      style: TextStyle(color: Colors.white),
                     ),
                     selected: !isCreditCard,
-                    backgroundColor: Colors.blueAccent[
-                        700], // Updated background color to blueAccent[700]
+                    backgroundColor: Colors.blueAccent[700],
                     selectedColor: Colors.blueAccent,
                     onSelected: (selected) {
                       setState(() {
@@ -281,8 +288,7 @@ class _PaymentPageState extends State<PaymentPage> {
             SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors
-                    .blueAccent[700], // Updated button color to blueAccent[700]
+                backgroundColor: Colors.blueAccent[700],
               ),
               onPressed: () {
                 if (_validateForm()) {
@@ -291,8 +297,7 @@ class _PaymentPageState extends State<PaymentPage> {
               },
               child: Text(
                 'Confirm Payment',
-                style:
-                    TextStyle(color: Colors.white), // Set text color to white
+                style: TextStyle(color: Colors.white),
               ),
             ),
           ],
