@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'payment_page.dart';
+import 'payment_page.dart'; // Import the payment page.
 
 class ReserveSpotScreen extends StatefulWidget {
   final String selectedDeck;
@@ -60,13 +60,15 @@ class _ReserveSpotScreenState extends State<ReserveSpotScreen> {
             SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
+                // After selecting the duration, navigate to the payment page
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => PaymentPage(
-                            amount: _cost,
-                            parkingDeckName: '',
-                          )),
+                    builder: (context) => PaymentPage(
+                      amount: _cost,
+                      parkingDeckName: widget.selectedDeck,
+                    ),
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(
