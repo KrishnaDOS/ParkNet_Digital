@@ -25,7 +25,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
     if (_formKey.currentState!.validate()) {
       try {
         // Create user
-        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        UserCredential userCredential =
+            await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
@@ -46,7 +47,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
         // Navigate to the login screen and clear the back stack
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => LoginPage()), // Replace with your actual LoginPage widget
+          MaterialPageRoute(
+              builder: (context) =>
+                  LoginPage()), // Replace with your actual LoginPage widget
           (Route<dynamic> route) => false, // This removes all previous routes
         );
       } on FirebaseAuthException catch (e) {
@@ -62,19 +65,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return Scaffold(
       backgroundColor: Colors.blueGrey[900],
       appBar: AppBar(
-        title: const Text(
-          'Register',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.blueAccent[700],
-        elevation: 4,
-        titleTextStyle: const TextStyle(
-          color: Colors.white,
-          fontSize: 24,
-          fontWeight: FontWeight.bold
-        )
-      ),
+          title: const Text(
+            'Register',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.blueAccent[700],
+          elevation: 4,
+          titleTextStyle: const TextStyle(
+              color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(

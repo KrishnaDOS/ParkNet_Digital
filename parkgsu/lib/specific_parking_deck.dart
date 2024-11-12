@@ -29,7 +29,7 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
       if (querySnapshot.docs.isNotEmpty) {
         var deckData;
         for (var doc in querySnapshot.docs) {
-          if ((doc.data()['deck_name'] as String).toLowerCase() == 
+          if ((doc.data()['deck_name'] as String).toLowerCase() ==
               _deckName.toLowerCase()) {
             deckData = doc.data();
             break;
@@ -71,8 +71,17 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
   }
 
   final List<String> PDecks = [
-    'B Deck', 'C Deck', 'E Deck', 'G Deck', 'H Deck', 'K Deck',
-    'L Deck', 'M Deck', 'N Deck', 'S Deck', 'T Deck',
+    'B Deck',
+    'C Deck',
+    'E Deck',
+    'G Deck',
+    'H Deck',
+    'K Deck',
+    'L Deck',
+    'M Deck',
+    'N Deck',
+    'S Deck',
+    'T Deck',
     'Z Deck'
   ];
 
@@ -114,8 +123,7 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
               ElevatedButton(
                 onPressed: _searchParkingDeck,
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 40, vertical: 15),
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   backgroundColor: Colors.blueAccent[700],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
@@ -124,8 +132,7 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
                 child: _isLoading
                     ? CircularProgressIndicator(color: Colors.white)
                     : Text('Search',
-                        style: TextStyle(
-                            fontSize: 18, color: Colors.white)),
+                        style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
               SizedBox(height: 20),
               Text(
@@ -147,15 +154,23 @@ class _SpecificParkingDeckScreenState extends State<SpecificParkingDeckScreen> {
               child: ElevatedButton(
                 onPressed: _openSpots > 0
                     ? () {
-                        Navigator.pushNamed(context, '/reserveSpot',
-                            arguments: _deckName);
+                        // Navigate to the payment page with deck info and open spots as arguments
+                        Navigator.pushNamed(
+                          context,
+                          '/payment',
+                          arguments: {
+                            'amount':
+                                5.0, // Example amount, you can modify this
+                            'parkingDeckName': _deckName,
+                            'openSpots': _openSpots
+                          },
+                        );
                       }
                     : null,
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: _openSpots > 0
-                      ? Colors.blueAccent[700]
-                      : Colors.grey,
+                  backgroundColor:
+                      _openSpots > 0 ? Colors.blueAccent[700] : Colors.grey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

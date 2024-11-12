@@ -35,9 +35,11 @@ class _ReserveSpotScreenState extends State<ReserveSpotScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Selected Deck: ${widget.selectedDeck}', style: TextStyle(color: Colors.white, fontSize: 20)),
+            Text('Selected Deck: ${widget.selectedDeck}',
+                style: TextStyle(color: Colors.white, fontSize: 20)),
             SizedBox(height: 20),
-            Text('Select Duration: ${_hours.toStringAsFixed(0)} hour(s)', style: TextStyle(color: Colors.white, fontSize: 20)),
+            Text('Select Duration: ${_hours.toStringAsFixed(0)} hour(s)',
+                style: TextStyle(color: Colors.white, fontSize: 20)),
             SizedBox(height: 20),
             Slider(
               value: _hours,
@@ -50,20 +52,29 @@ class _ReserveSpotScreenState extends State<ReserveSpotScreen> {
               inactiveColor: Colors.blueGrey[700],
             ),
             SizedBox(height: 20),
-            Text('Cost: \$${_cost.toStringAsFixed(2)}', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+            Text('Cost: \$${_cost.toStringAsFixed(2)}',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold)),
             SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PaymentPage(amount: _cost)),
+                  MaterialPageRoute(
+                      builder: (context) => PaymentPage(
+                            amount: _cost,
+                            parkingDeckName: '',
+                          )),
                 );
               },
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 16),
                 backgroundColor: Colors.blueAccent[700],
               ),
-              child: Text('Proceed to Payment', style: TextStyle(fontSize: 20, color: Colors.white)),
+              child: Text('Proceed to Payment',
+                  style: TextStyle(fontSize: 20, color: Colors.white)),
             ),
           ],
         ),
