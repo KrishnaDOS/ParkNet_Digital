@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class EventsPage extends StatefulWidget {
-  const EventsPage({super.key});
+  const EventsPage({Key? key}) : super(key: key);
 
   @override
   _EventsPageState createState() => _EventsPageState();
 }
 
 class _EventsPageState extends State<EventsPage> {
-  late WebViewController _controller;
+  late final WebViewController _controller;
 
   @override
   void initState() {
     super.initState();
     _controller = WebViewController()
-      ..loadRequest(Uri.parse(
-          'https://google.com/')); // I will add eventfinder weblink later
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse('https://google.com/'));
   }
 
   @override
