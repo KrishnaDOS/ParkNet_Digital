@@ -36,10 +36,9 @@ class Dashboard extends StatelessWidget {
             SizedBox(height: 20),
             _buildDashboardItem(context, 'Customer Support',
                 Icons.support_agent, Colors.redAccent, () {
-              // Navigate to the Customer Support page
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const CustomerSupportPage()),
+                MaterialPageRoute(builder: (context) => CustomerSupportPage()),
               );
             }),
             SizedBox(height: 20),
