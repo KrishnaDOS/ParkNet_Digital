@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,20 +12,62 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
-  String email = '';
-  String password = '';
+  String emailOrUsername = ''; 
+  String password = ''; 
 
   Future<void> loginUser() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await _auth.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-        Navigator.pushReplacementNamed(context, '/dashboard');
+        if (emailOrUsername.contains('@')) {
+          await _auth.signInWithEmailAndPassword(
+            email: emailOrUsername,
+            password: password,
+          );
+          Navigator.pushReplacementNamed(context, '/dashboard');
+        } else {
+          var userQuery = await FirebaseFirestore.instance
+              .collection('users')
+              .where('username', isEqualTo: emailOrUsername)
+              .get();
+
+          if (userQuery.docs.isNotEmpty) {
+            String userEmail = userQuery.docs.first['email'];
+            print('User email found: $userEmail');
+            await _auth.signInWithEmailAndPassword(
+              email: userEmail,
+              password: password,
+            );
+            Navigator.pushReplacementNamed(context, '/dashboard');
+          } else {
+            var adminQuery = await FirebaseFirestore.instance
+                .collection('admins')
+                .where('username', isEqualTo: emailOrUsername)
+                .get();
+
+            if (adminQuery.docs.isNotEmpty) {
+              String adminEmail = adminQuery.docs.first['email'];
+              print('Admin email found: $adminEmail');
+              await _auth.signInWithEmailAndPassword(
+                email: adminEmail,
+                password: password,
+              );
+              Navigator.pushReplacementNamed(context, '/dashboard');
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Username not found')),
+              );
+              return;
+            }
+          }
+        }
       } on FirebaseAuthException catch (e) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.message ?? 'Error')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message ?? 'Authentication failed')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
       }
     }
   }
@@ -44,8 +87,8 @@ class _LoginPageState extends State<LoginPage> {
         titleTextStyle: const TextStyle(
           color: Colors.white,
           fontSize: 24,
-          fontWeight: FontWeight.bold
-        )
+          fontWeight: FontWeight.bold,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -65,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                     borderSide: BorderSide(color: Colors.lightBlueAccent),
                   ),
                 ),
-                onChanged: (value) => email = value,
+                onChanged: (value) => emailOrUsername = value,
                 validator: (value) =>
                     value!.isEmpty ? 'Enter your email or username' : null,
                 style: TextStyle(color: Colors.white),
