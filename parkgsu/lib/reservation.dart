@@ -26,7 +26,11 @@ class _ReserveSpotScreenState extends State<ReserveSpotScreen> {
     return Scaffold(
       backgroundColor: Colors.blueGrey[900],
       appBar: AppBar(
-        title: const Text('Reserve Parking Spot'),
+        title: const Text(
+          'Reserve Parking Spot',
+          style: TextStyle(
+              color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+          ),
         centerTitle: true,
         backgroundColor: Colors.blueAccent[700],
       ),
