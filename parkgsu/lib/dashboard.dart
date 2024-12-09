@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'customer_support.dart';
 import 'events.dart';
 import 'my_reservations.dart';
@@ -14,7 +15,7 @@ class Dashboard extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'ParkGSU Dashboard',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
         backgroundColor: Colors.blueAccent[700],
@@ -23,8 +24,12 @@ class Dashboard extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start, // Start from the top
           children: [
+            // Loyalty Points Text Field at the top
+            _buildLoyaltyPointsDisplay(context),
+            SizedBox(height: 2.5),
+
             _buildDashboardItem(context, 'My Reservations',
                 Icons.history, Colors.orangeAccent, () {
               Navigator.push(
@@ -53,11 +58,48 @@ class Dashboard extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => CustomerSupportPage()),
               );
             }),
-            SizedBox(height: 30),
+            SizedBox(height: 20),
             _buildLogoutButton(context),
           ],
         ),
       ),
+    );
+  }
+
+  // Loyalty Points display method
+  Widget _buildLoyaltyPointsDisplay(BuildContext context) {
+    return FutureBuilder<DocumentSnapshot>(
+      future: FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser?.uid)
+          .get(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+        if (!snapshot.hasData || !snapshot.data!.exists) {
+          return const Text(
+            'Loyalty Points: 0',
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          );
+        }
+
+        final loyaltyPoints = snapshot.data!['loyaltyPoints'] ?? 0;
+
+        return Container(
+          alignment: Alignment.center,
+          margin: const EdgeInsets.only(bottom: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            'My Loyalty Points: $loyaltyPoints',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue[200],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -91,7 +133,7 @@ class Dashboard extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.bold
                 ),
               ),
             ],

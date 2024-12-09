@@ -11,7 +11,7 @@ class MyReservationsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'My Reservations',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
         backgroundColor: Colors.blueAccent[700],
