@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
+import 'package:flutter/services.dart';
+import 'package:parkgsu/payment_confirmation.dart';
 
 class PaymentPage extends StatefulWidget {
   final double amount;
   final String parkingDeckName;
 
-  const PaymentPage(
-      {super.key, required this.amount, required this.parkingDeckName});
+  const PaymentPage({super.key, required this.amount, required this.parkingDeckName});
 
   @override
   _PaymentPageState createState() => _PaymentPageState();
@@ -23,11 +24,39 @@ class _PaymentPageState extends State<PaymentPage> {
   String? _expDateError;
   String? _cvcError;
 
+  int loyaltyPoints = 0;
+  int pointsToUse = 0;
+
   @override
   void initState() {
     super.initState();
     _cardNumberController.addListener(_formatCardNumber);
     _expDateController.addListener(_formatExpDate);
+    _getLoyaltyPoints();
+  }
+
+  Future<void> _getLoyaltyPoints() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+        if (userDoc.exists) {
+          setState(() {
+            loyaltyPoints = userDoc['loyaltyPoints'] ?? 0;
+          });
+        }
+      } catch (e) {
+        print("Error fetching loyalty points: $e");
+      }
+    }
+  }
+
+  double _calculateFinalAmount() {
+    if (pointsToUse > loyaltyPoints) {
+      pointsToUse = loyaltyPoints;
+    }
+    double pointsInDollars = pointsToUse * 0.05;
+    return widget.amount - pointsInDollars;
   }
 
   void _formatCardNumber() {
@@ -70,7 +99,6 @@ class _PaymentPageState extends State<PaymentPage> {
 
     bool isValid = true;
 
-    // Validate Card Number
     if (cardNumber.length != 16 || int.tryParse(cardNumber) == null) {
       setState(() {
         _cardNumberError = 'Enter a valid 16-digit card number';
@@ -82,11 +110,7 @@ class _PaymentPageState extends State<PaymentPage> {
       });
     }
 
-    // Validate Expiration Date
-    if (expDate.length != 5 ||
-        expDate[2] != '/' ||
-        int.tryParse(expDate.substring(0, 2)) == null ||
-        int.tryParse(expDate.substring(3, 5)) == null) {
+    if (expDate.length != 5 || expDate[2] != '/' || int.tryParse(expDate.substring(0, 2)) == null || int.tryParse(expDate.substring(3, 5)) == null) {
       setState(() {
         _expDateError = 'Expiration format: MM/YY';
       });
@@ -100,8 +124,7 @@ class _PaymentPageState extends State<PaymentPage> {
           _expDateError = 'Enter a valid expiration month (1-12)';
         });
         isValid = false;
-      } else if (expYear < year ||
-          (expYear == year && expMonth < currentMonth)) {
+      } else if (expYear < year || (expYear == year && expMonth < currentMonth)) {
         setState(() {
           _expDateError = 'Card expired';
         });
@@ -113,7 +136,6 @@ class _PaymentPageState extends State<PaymentPage> {
       }
     }
 
-    // Validate CVC
     final cvc = _cvcController.text;
     if (cvc.length != 3 || int.tryParse(cvc) == null) {
       setState(() {
@@ -132,8 +154,7 @@ class _PaymentPageState extends State<PaymentPage> {
   Future<void> _storeCardInfoAndNavigate() async {
     final user = FirebaseAuth.instance.currentUser;
 
-    // Generate a random gate pin
-    final int gatePin = Random().nextInt(10000);
+    //final int gatePin = Random().nextInt(10000);
 
     final paymentData = {
       'userId': user?.uid,
@@ -143,22 +164,50 @@ class _PaymentPageState extends State<PaymentPage> {
       'amount': widget.amount,
       'cardType': isCreditCard ? 'Credit' : 'Debit',
       'parkingDeckName': widget.parkingDeckName,
-      'gatePin': gatePin,
+      //'gatePin': gatePin,
+      //'confirmationNumber': Random().nextInt(1000000).toString().padLeft(6, '0'),
       'timestamp': Timestamp.now(),
     };
 
     try {
-      // Store payment data in Firestore
       await FirebaseFirestore.instance.collection('payments').add(paymentData);
 
-      // After storing payment info, navigate to the PaymentConfirmationPage (optional)
-      Navigator.pushNamed(
-          context, '/paymentConfirmation'); // Update route if needed
+      if (pointsToUse > loyaltyPoints) {
+        setState(() {
+          _cardNumberError = 'You do not have enough loyalty points.';
+        });
+        return;
+      }
+
+      final int remainingPoints = loyaltyPoints - pointsToUse;
+      final int updatedPoints = remainingPoints + 10;
+
+      await _updateLoyaltyPoints(updatedPoints);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PaymentConfirmation(parkingDeckName: widget.parkingDeckName),
+        ),
+      );
     } catch (e) {
       print("Error storing payment information: $e");
       setState(() {
         _cardNumberError = 'Error processing payment. Please try again.';
       });
+    }
+  }
+
+  Future<void> _updateLoyaltyPoints(int newPoints) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+          'loyaltyPoints': newPoints,
+        });
+      } catch (e) {
+        print("Error updating loyalty points: $e");
+      }
     }
   }
 
@@ -168,8 +217,7 @@ class _PaymentPageState extends State<PaymentPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Confirm Payment'),
-          content: Text(
-              'Continue with payment of \$${widget.amount.toStringAsFixed(2)}?'), // Format amount to two decimals
+          content: Text('Continue with payment of \$${_calculateFinalAmount().toStringAsFixed(2)}?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -193,45 +241,38 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blueGrey[900],
       appBar: AppBar(
         title: const Text(
           'Payment',
-          style: TextStyle(
-              color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.blueAccent[700],
       ),
-      body: Container(
-        color: Colors.blueGrey[700],
+      body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               'Enter Payment Details',
-              style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             SizedBox(height: 30),
             TextField(
               controller: _cardNumberController,
+              style: TextStyle(color: Colors.white),
+              maxLines: 1,
               decoration: InputDecoration(
-                labelText: 'Card Number',
-                hintText: '1234-5678-9012-3456',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
-                ),
-                fillColor: Colors.white,
+                hintText: "1234-5678-9012-3456",
+                hintStyle: TextStyle(color: Colors.white54),
                 filled: true,
+                fillColor: Colors.blueGrey[800],
                 errorText: _cardNumberError,
-                errorStyle: TextStyle(color: Colors.redAccent),
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: 20, horizontal: 15), // Increased padding
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
               ),
               keyboardType: TextInputType.number,
             ),
@@ -241,22 +282,18 @@ class _PaymentPageState extends State<PaymentPage> {
                 Expanded(
                   child: TextField(
                     controller: _expDateController,
+                    style: TextStyle(color: Colors.white),
+                    maxLines: 1,
                     decoration: InputDecoration(
-                      labelText: 'Expiration Date (MM/YY)',
-                      hintText: 'MM/YY',
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blueAccent),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.blueAccent, width: 2.0),
-                      ),
-                      fillColor: Colors.white,
+                      hintText: "MM/YY",
+                      hintStyle: TextStyle(color: Colors.white54),
                       filled: true,
+                      fillColor: Colors.blueGrey[800],
                       errorText: _expDateError,
-                      errorStyle: TextStyle(color: Colors.redAccent),
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 15), // Increased padding
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                     keyboardType: TextInputType.number,
                   ),
@@ -265,79 +302,70 @@ class _PaymentPageState extends State<PaymentPage> {
                 Expanded(
                   child: TextField(
                     controller: _cvcController,
+                    style: TextStyle(color: Colors.white),
+                    maxLines: 1,
                     decoration: InputDecoration(
-                      labelText: 'CVC',
-                      hintText: '123',
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blueAccent),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.blueAccent, width: 2.0),
-                      ),
-                      fillColor: Colors.white,
+                      hintText: "CVC",
+                      hintStyle: TextStyle(color: Colors.white54),
                       filled: true,
+                      fillColor: Colors.blueGrey[800],
                       errorText: _cvcError,
-                      errorStyle: TextStyle(color: Colors.redAccent),
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 15), // Increased padding
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                     keyboardType: TextInputType.number,
-                    maxLength: 3, // Restrict input to 3 digits
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(3),
+                    ],
                   ),
                 ),
               ],
             ),
             SizedBox(height: 20),
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ChoiceChip(
-                    label: Text(
-                      'Credit Card',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    selected: isCreditCard,
-                    backgroundColor: Colors.blueAccent[700],
-                    selectedColor: Colors.blueAccent,
-                    onSelected: (selected) {
-                      setState(() {
-                        isCreditCard = true;
-                      });
-                    },
-                  ),
-                  SizedBox(width: 10),
-                  ChoiceChip(
-                    label: Text(
-                      'Debit Card',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    selected: !isCreditCard,
-                    backgroundColor: Colors.blueAccent[700],
-                    selectedColor: Colors.blueAccent,
-                    onSelected: (selected) {
-                      setState(() {
-                        isCreditCard = false;
-                      });
-                    },
-                  ),
-                ],
-              ),
+            Text(
+              'Loyalty Points Available: $loyaltyPoints',
+              style: TextStyle(color: Colors.white, fontSize: 16),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent[700],
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  pointsToUse = int.tryParse(value) ?? 0;
+                });
+              },
+              enabled: loyaltyPoints > 0,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: "Enter points to use",
+                hintStyle: TextStyle(color: Colors.white54),
+                filled: true,
+                fillColor: Colors.blueGrey[800],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
               ),
+            ),
+            SizedBox(height: 30),
+            ElevatedButton(
               onPressed: () {
                 if (_validateForm()) {
                   _showConfirmationDialog();
                 }
               },
               child: Text(
-                'Confirm Payment',
-                style: TextStyle(color: Colors.white),
+                'Pay \$${_calculateFinalAmount().toStringAsFixed(2)}',
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ],

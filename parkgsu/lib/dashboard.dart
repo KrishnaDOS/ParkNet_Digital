@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'customer_support.dart';
 import 'events.dart';
+import 'my_reservations.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -18,20 +19,31 @@ class Dashboard extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.blueAccent[700],
         elevation: 4,
-        titleTextStyle: const TextStyle(
-          color: Colors.white,
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            _buildDashboardItem(context, 'My Reservations',
+                Icons.history, Colors.orangeAccent, () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyReservationsPage()),
+              );
+            }),
+            SizedBox(height: 20),
             _buildDashboardItem(context, 'Parking Reservation',
                 Icons.local_parking, Colors.lightBlueAccent, () {
               Navigator.pushNamed(context, '/parkingReservation');
+            }),
+            SizedBox(height: 20),
+            _buildDashboardItem(context, 'Local Event Finder',
+                Icons.event, Colors.greenAccent, () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EventsPage()),
+              );
             }),
             SizedBox(height: 20),
             _buildDashboardItem(context, 'Customer Support',
@@ -39,15 +51,6 @@ class Dashboard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CustomerSupportPage()),
-              );
-            }),
-            SizedBox(height: 20),
-            _buildDashboardItem(
-                context, 'Local Event Finder', Icons.event, Colors.greenAccent,
-                () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EventsPage()),
               );
             }),
             SizedBox(height: 30),
@@ -104,7 +107,7 @@ class Dashboard extends StatelessWidget {
         try {
           await FirebaseAuth.instance.signOut();
           Navigator.pushReplacementNamed(
-              context, '/');
+              context, '/'); // Redirect to login or home screen
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Error logging out: $e')),

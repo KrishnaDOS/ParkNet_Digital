@@ -51,25 +51,11 @@ class MyReservationsPage extends StatelessWidget {
           return ListView(
             padding: EdgeInsets.all(20),
             children: [
-              _buildSectionTitle('My Current Reservations'),
               ...currentReservations.map((doc) => _buildReservationCard(doc)),
-              SizedBox(height: 20),
-              _buildSectionTitle('Past Reservations'),
               ...pastReservations.map((doc) => _buildReservationCard(doc)),
             ],
           );
         },
-      ),
-    );
-  }
-
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Text(
-        title,
-        style: const TextStyle(
-            fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
       ),
     );
   }
