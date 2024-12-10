@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'directions.dart';
 
 class PaymentConfirmation extends StatelessWidget {
   final String parkingDeckName;
@@ -112,6 +113,40 @@ class PaymentConfirmation extends StatelessWidget {
           ),
           Spacer(),
 
+          Container(
+            width: double.infinity,
+            height: 60,
+            margin: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: ElevatedButton(
+                onPressed: 1 > 0
+                    ? () {
+                        // Navigate to the duration selection page instead of payment
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DirectionsScreen(
+                              selectedDeck:
+                                  parkingDeckName, // Passing deck name to the duration page
+                            ),
+                          ),
+                        );
+                      }
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor:
+                      1 > 0 ? Colors.blueAccent[700] : Colors.grey,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  'Get Directions',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+              ),
+          ),
+
           // Go to Dashboard button spanning full width
           Container(
             width: double.infinity,
@@ -137,5 +172,6 @@ class PaymentConfirmation extends StatelessWidget {
         ],
       ),
     );
+    
   }
 }
